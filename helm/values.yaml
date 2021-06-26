@@ -52,15 +52,14 @@ keycloak:
   service:
     type: ClusterIP
     port: 8080
-#  customReadinessProbe: |
-#    httpGet:
-#      path: /auth/realms/master
-#      port: 8080
-#    initialDelaySeconds: 30
-#    timeoutSeconds: 30
-#  externalDatabase:
-#    port:
-
-#postgresql:
+  ingress:
+    hostname:
+    enabled: true
+    pathType: Prefix
+    path: /stuff/keycloak
+    servicePort: 8080
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
 
 
