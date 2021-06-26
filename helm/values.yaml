@@ -52,6 +52,12 @@ keycloak:
   service:
     type: ClusterIP
     port: 8080
+#  customReadinessProbe: |
+#    httpGet:
+#      path: /auth/realms/master
+#      port: 8080
+#    initialDelaySeconds: 30
+#    timeoutSeconds: 30
 #  externalDatabase:
 #    port:
 
