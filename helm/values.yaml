@@ -38,7 +38,7 @@ dashboard:
     port: 8080
     image:
       repository: public.ecr.aws/g0o0x0q6/rebugit/dashboard
-      tag: "1624693521"
+      tag: "1624785879"
 
 tracer:
   replicaCount: 1
@@ -61,6 +61,12 @@ keycloak:
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
   readinessProbe:
+    enabled: true
+    httpGet:
+      path: /rebugit/keycloak/auth/realms/master
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+  livenessProbe:
     enabled: true
     httpGet:
       path: /rebugit/keycloak/auth/realms/master
