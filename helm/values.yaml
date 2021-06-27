@@ -45,6 +45,11 @@ tracer:
 
 keycloak:
   replicaCount: 1
+  image:
+    registry: public.ecr.aws
+    repository: g0o0x0q6/keycloak
+    tag: "1624772760"
+    pullPolicy: Always
   auth:
     adminPassword: admin
     adminUser: admin
@@ -52,14 +57,20 @@ keycloak:
   service:
     type: ClusterIP
     port: 8080
+  extraEnvVars:
+    - name: PROXY_ADDRESS_FORWARDING
+      value: "true"
+  readinessProbe:
+    enabled: true
+    httpGet:
+      path: /rebugit/keycloak/auth/realms/master
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
   ingress:
     hostname:
     enabled: true
     pathType: Prefix
-    path: /stuff/keycloak
+    path: /rebugit/keycloak
     servicePort: 8080
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/rewrite-target: /$1
 
 
