@@ -18,17 +18,18 @@ spec:
         - name: {{ .Values.dashboard.containers.name }}
           image: {{ .Values.dashboard.containers.image.repository }}:{{ .Values.dashboard.containers.image.tag }}
           imagePullPolicy: Always
-          env:
-            - name: REACT_APP_KEYCLOAK_URL
-              value: http://localhost/rebugit/keycloak
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              port: {{ .Values.dashboard.containers.port }}*/}}
-{{/*              path: /*/}}
-{{/*            initialDelaySeconds: 30*/}}
-{{/*            periodSeconds: 5*/}}
           ports:
             - containerPort: {{ .Values.dashboard.containers.port }}
+          env:
+            - name: REACT_APP_BASE_PATH
+              value: /rebugit/web
+            {{- if .Values.dashboard.environment}}
+            {{- range .Values.dashboard.environment }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
+            {{- end -}}
+
 {{/*          resources:*/}}
 {{/*            requests:*/}}
 {{/*              memory: "50Mi"*/}}
@@ -36,3 +37,9 @@ spec:
 {{/*            limits:*/}}
 {{/*              memory: "500Mi"*/}}
 {{/*              cpu: "1000m"*/}}
+{{/*          livenessProbe:*/}}
+{{/*            httpGet:*/}}
+{{/*              port: {{ .Values.dashboard.containers.port }}*/}}
+{{/*              path: /*/}}
+{{/*            initialDelaySeconds: 30*/}}
+{{/*            periodSeconds: 5*/}}

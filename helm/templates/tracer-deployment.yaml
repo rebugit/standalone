@@ -1,0 +1,22 @@
+{{/*apiVersion: apps/v1*/}}
+{{/*kind: Deployment*/}}
+{{/*metadata:*/}}
+{{/*  name: {{ .Values.tracer.deployment.name }}*/}}
+{{/*  labels:*/}}
+{{/*    app: {{ .Values.tracer.deployment.name }}*/}}
+{{/*spec:*/}}
+{{/*  replicas: 1*/}}
+{{/*  selector:*/}}
+{{/*    matchLabels:*/}}
+{{/*      app: {{ .Values.tracer.deployment.name }}*/}}
+{{/*  template:*/}}
+{{/*    metadata:*/}}
+{{/*      labels:*/}}
+{{/*        app: {{ .Values.tracer.deployment.name }}*/}}
+{{/*    spec:*/}}
+{{/*      containers:*/}}
+{{/*        - name: {{ .Values.tracer.containers.name }}*/}}
+{{/*          image: {{ .Values.tracer.containers.image.repository }}:{{ .Values.tracer.containers.image.tag }}*/}}
+{{/*          imagePullPolicy: Always*/}}
+{{/*          ports:*/}}
+{{/*            - containerPort: {{ .Values.tracer.containers.port }}*/}}

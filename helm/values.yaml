@@ -1,4 +1,3 @@
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -9,23 +8,6 @@ serviceAccount:
   name: ""
 
 resources: { }
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-#   cpu: 100m
-#   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 dashboard:
   service:
@@ -38,10 +20,32 @@ dashboard:
     port: 8080
     image:
       repository: public.ecr.aws/g0o0x0q6/rebugit/dashboard
-      tag: "1624785879"
+      tag: "1624839720"
+  environment:
+    - name: REACT_APP_KEYCLOAK_URL
+      value: http://localhost/rebugit/keycloak
+    - name: REACT_APP_AUTH_MODE
+      value: keycloak
+    - name: REACT_APP_API_DOMAIN
+      value: http://localhost:8080
 
 tracer:
   replicaCount: 1
+  deployment:
+    name: rebugit-tracer
+  containers:
+    name: tracer
+    port: 8080
+    image:
+      repository: public.ecr.aws/g0o0x0q6/tracer
+      tag: "1624839720"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
 
 keycloak:
   replicaCount: 1
