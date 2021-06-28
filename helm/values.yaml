@@ -46,6 +46,12 @@ tracer:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
 
+migration:
+  containers:
+    name: database-migration-job
+    image:
+      repository: public.ecr.aws/g0o0x0q6/migrator
+      tag: "1624839720"
 
 keycloak:
   replicaCount: 1
@@ -82,5 +88,7 @@ keycloak:
     pathType: Prefix
     path: /rebugit/keycloak
     servicePort: 8080
-
-
+  postgresql:
+    postgresqlDatabase: keycloak
+    postgresqlPassword: postgres
+    postgresqlUsername: postgres
