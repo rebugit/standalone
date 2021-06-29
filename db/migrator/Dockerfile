@@ -15,7 +15,7 @@ FROM centos:8
 RUN yum update -y && yum install curl -y
 
 COPY --from=stage-02 /app/main /app/main
-COPY migrations/ /app/migrations
+COPY migrations /app/migrations
 
 WORKDIR /app
 ENTRYPOINT ["./main"]

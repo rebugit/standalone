@@ -9,6 +9,8 @@ serviceAccount:
 
 resources: { }
 
+namespace: rebugit
+
 dashboard:
   service:
     name: rebugit-dashboard
