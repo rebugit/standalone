@@ -14,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{.Values.dashboard.service.name }}
+                name: {{ include "dashboard.service.name" . }}
                 port:
-                  number: {{.Values.dashboard.service.port}}
+                  number: {{.Values.dashboard.port}}

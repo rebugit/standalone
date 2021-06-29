@@ -6,8 +6,8 @@ spec:
   template:
     spec:
       containers:
-        - name: {{ .Values.migration.containers.name }}
-          image: {{ .Values.migration.containers.image.repository }}:{{ .Values.migration.containers.image.tag }}
+        - name: {{ .Values.postgresql.migration.containers.name }}
+          image: {{ .Values.postgresql.migration.containers.image.repository }}:{{ .Values.postgresql.migration.containers.image.tag }}
           imagePullPolicy: Always
       restartPolicy: Never
   backoffLimit: 4

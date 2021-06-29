@@ -12,24 +12,20 @@ resources: { }
 namespace: rebugit
 
 dashboard:
-  service:
-    name: rebugit-dashboard
-    port: 3000
-  deployment:
-    name: rebugit-dashboard
+  keycloakUrl: http://localhost/rebugit/keycloak
+  authenticationMode: keycloak
+  tracerApiUrl: http://localhost:8080
+  port: 3000
   containers:
     name: nginx
-    port: 8080
     image:
       repository: public.ecr.aws/g0o0x0q6/rebugit/dashboard
       tag: "1624839720"
-  environment:
-    - name: REACT_APP_KEYCLOAK_URL
-      value: http://localhost/rebugit/keycloak
-    - name: REACT_APP_AUTH_MODE
-      value: keycloak
-    - name: REACT_APP_API_DOMAIN
-      value: http://localhost:8080
+
+  # Add custom environmental variables as an array of objects
+  # - name: MY_ENV
+  #   value: hello
+  environment: []
 
 tracer:
   replicaCount: 1
@@ -48,12 +44,13 @@ tracer:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
 
-migration:
-  containers:
-    name: database-migration-job
-    image:
-      repository: public.ecr.aws/g0o0x0q6/migrator
-      tag: "1624839720"
+postgresql:
+  migration:
+    containers:
+      name: database-migration-job
+      image:
+        repository: public.ecr.aws/g0o0x0q6/migrator
+        tag: "1624839720"
 
 keycloak:
   replicaCount: 1
@@ -94,3 +91,8 @@ keycloak:
     postgresqlDatabase: keycloak
     postgresqlPassword: postgres
     postgresqlUsername: postgres
+    image:
+      registry: public.ecr.aws
+      repository: g0o0x0q6/postgres
+      tag: "1624926245"
+      pullPolicy: Always
