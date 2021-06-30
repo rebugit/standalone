@@ -1,70 +1,82 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jackc/pgx/v4"
 	"log"
 	"os"
 )
 
+func PgxClient(connectionURI string) (*pgx.Conn, error) {
+	return pgx.Connect(context.Background(), connectionURI)
+}
+
+func MigrateClient(connectionURI string) (*migrate.Migrate, error) {
+	return migrate.New("file://migrations", connectionURI)
+}
+
 func main() {
-	connectionURI, err := getConnectionURI()
+	connectionURI := getConnectionURI()
+	pgxClient, err := PgxClient(connectionURI)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	m, err := migrate.New("file://migrations", connectionURI)
-	if err != nil {
+	if err := CreateUserPassword(pgxClient); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := m.Up(); err != nil {
+	migrateClient, err := MigrateClient(connectionURI)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := migrateDb(migrateClient); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func migrateDb(client *migrate.Migrate) error {
+	if err := client.Up(); err != nil {
 		log.Println(err)
 
 		if err == migrate.ErrNoChange {
 			os.Exit(0)
 		}
 
-		if err := m.Down(); err != nil {
+		if err := client.Down(); err != nil {
 			log.Fatal(err)
 		}
 	}
-
 	log.Println("Migration done")
+	return nil
 }
 
-func getConnectionURI() (string, error) {
-	creds, err := getCredentials()
-	if err != nil {
-		return "", err
+func CreateUserPassword(client *pgx.Conn) error {
+	password := os.Getenv("POSTGRES_USER_PASSWORD")
+	if password == "" {
+		log.Println("WARNING: you are using a default user password, this is could be EXTREMELY UNSAFE, " +
+			"you should set your password with POSTGRES_USER_PASSWORD")
 	}
-	Port := 5432
 
+	query := fmt.Sprintf("ALTER USER app WITH PASSWORD '%s'", password)
+	if _, err := client.Exec(context.Background(), query); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getConnectionURI() string {
 	connectionURI := fmt.Sprintf(
 		"postgres://%v:%v@%v:%v/%v?sslmode=disable",
-		creds.Username,
-		creds.Password,
-		creds.Host,
-		Port,
-		creds.Dbname,
+		os.Getenv("POSTGRES_ADMIN"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_PORT"),
+		"rebugit",
 	)
-	return connectionURI, nil
-}
-
-type credentials struct {
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Dbname   string `json:"dbname"`
-	Username string `json:"username"`
-}
-
-func getCredentials() (credentials, error) {
-	return credentials{
-		Password: os.Getenv("POSTGRES_PASSWORD"),
-		Host:     os.Getenv("POSTGRES_HOST"),
-		Dbname:   "rebugit",
-		Username: os.Getenv("POSTGRES_ADMIN"),
-	}, nil
+	return connectionURI
 }
