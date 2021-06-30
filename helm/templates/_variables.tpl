@@ -7,3 +7,6 @@
 {{- define "dashboard.service.name" -}}
 {{- print "rebugit-dashboard" -}}
 {{- end -}}
+{{- define "tracer.deployment.name" -}}
+{{- print "rebugit-tracer" -}}
+{{- end -}}

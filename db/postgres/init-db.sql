@@ -1,5 +1,4 @@
 CREATE DATABASE rebugit;
-CREATE DATABASE keycloak;
 
 -- Roles and permissions --
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;

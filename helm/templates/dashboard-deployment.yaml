@@ -15,8 +15,8 @@ spec:
         app: {{ include "dashboard.deployment.name" . }}
     spec:
       containers:
-        - name: {{ .Values.dashboard.containers.name }}
-          image: {{ .Values.dashboard.containers.image.repository }}:{{ .Values.dashboard.containers.image.tag }}
+        - name: {{ .Values.dashboard.name }}
+          image: {{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}
           imagePullPolicy: Always
           ports:
             - containerPort: {{ include "dashboard.container.port" . }}
@@ -29,20 +29,9 @@ spec:
               value: {{.Values.dashboard.authenticationMode}}
             - name: REACT_APP_API_DOMAIN
               value: {{.Values.dashboard.tracerApiUrl}}
-            {{- if .Values.dashboard.environment}}
-            {{- range .Values.dashboard.environment }}
-            - name: {{ .name }}
-              value: {{ .value }}
-            {{- end }}
-            {{- end -}}
+          resources:
+          {{- toYaml .Values.dashboard.resources | nindent 12}}
 
-{{/*          resources:*/}}
-{{/*            requests:*/}}
-{{/*              memory: "50Mi"*/}}
-{{/*              cpu: "500m"*/}}
-{{/*            limits:*/}}
-{{/*              memory: "500Mi"*/}}
-{{/*              cpu: "1000m"*/}}
 {{/*          livenessProbe:*/}}
 {{/*            httpGet:*/}}
 {{/*              port: {{ .Values.dashboard.containers.port }}*/}}

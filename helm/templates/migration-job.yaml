@@ -1,13 +1,13 @@
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: database-migration-job
-spec:
-  template:
-    spec:
-      containers:
-        - name: {{ .Values.postgresql.migration.containers.name }}
-          image: {{ .Values.postgresql.migration.containers.image.repository }}:{{ .Values.postgresql.migration.containers.image.tag }}
-          imagePullPolicy: Always
-      restartPolicy: Never
-  backoffLimit: 4
+{{/*apiVersion: batch/v1*/}}
+{{/*kind: Job*/}}
+{{/*metadata:*/}}
+{{/*  name: database-migration-job*/}}
+{{/*spec:*/}}
+{{/*  template:*/}}
+{{/*    spec:*/}}
+{{/*      containers:*/}}
+{{/*        - name: {{ .Values.database.migration.containers.name }}*/}}
+{{/*          image: {{ .Values.database.migration.containers.image.repository }}:{{ .Values.database.migration.containers.image.tag }}*/}}
+{{/*          imagePullPolicy: Always*/}}
+{{/*      restartPolicy: Never*/}}
+{{/*  backoffLimit: 4*/}}
