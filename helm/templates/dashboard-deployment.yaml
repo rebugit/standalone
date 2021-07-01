@@ -15,8 +15,8 @@ spec:
         app: {{ include "dashboard.deployment.name" . }}
     spec:
       containers:
-        - name: {{ .Values.dashboard.name }}
-          image: {{ .Values.dashboard.image.repository }}:{{ .Values.dashboard.image.tag }}
+        - name: nginx
+          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/rebugit/dashboard:{{.Values.dashboard.image.version}}"
           imagePullPolicy: Always
           ports:
             - containerPort: {{ include "dashboard.container.port" . }}
@@ -31,10 +31,3 @@ spec:
               value: {{.Values.dashboard.tracerApiUrl}}
           resources:
           {{- toYaml .Values.dashboard.resources | nindent 12}}
-
-{{/*          livenessProbe:*/}}
-{{/*            httpGet:*/}}
-{{/*              port: {{ .Values.dashboard.containers.port }}*/}}
-{{/*              path: /*/}}
-{{/*            initialDelaySeconds: 30*/}}
-{{/*            periodSeconds: 5*/}}

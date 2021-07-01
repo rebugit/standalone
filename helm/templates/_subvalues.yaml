@@ -1,0 +1,52 @@
+keycloak:
+  replicaCount: 1
+  image:
+    registry: {{.Values.rebugit.registry}}
+    repository: {{.Values.rebugit.repository}}/keycloak
+    tag: {{.Values.authentication.image.version}}
+    pullPolicy: Always
+  auth:
+    adminPassword: {{.Values.authentication.admin.password}}
+    adminUser: {{.Values.authentication.admin.user}}
+    createAdminUser: true
+  service:
+    type: ClusterIP
+    port: 8080
+  extraEnvVars:
+    - name: PROXY_ADDRESS_FORWARDING
+      value: "true"
+  readinessProbe:
+    enabled: false
+    httpGet:
+      path: /rebugit/keycloak/auth/realms/master
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+  livenessProbe:
+    enabled: false
+    httpGet:
+      path: /rebugit/keycloak/auth/realms/master
+    initialDelaySeconds: 30
+    timeoutSeconds: 30
+  ingress:
+    hostname:
+    enabled: true
+    pathType: Prefix
+    path: /rebugit/keycloak
+    servicePort: 8080
+  externalDatabase:
+    port: 5432
+    database: keycloak
+    host: rebugit-postgresql
+    password: postgres
+    user: postgres
+  postgresql:
+    enabled: false
+
+postgresql:
+  postgresqlPassword: {{.Values.database.admin.password}}
+  image:
+    debug: true
+    registry: {{ .Values.rebugit.registry}}
+    repository: {{.Values.rebugit.repository}}/postgres
+    tag: {{.Values.database.image.version}}
+    pullPolicy: Always

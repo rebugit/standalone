@@ -16,7 +16,7 @@
 {{/*    spec:*/}}
 {{/*      containers:*/}}
 {{/*        - name: {{ .Values.tracer.containers.name }}*/}}
-{{/*          image: {{ .Values.tracer.containers.image.repository }}:{{ .Values.tracer.containers.image.tag }}*/}}
+{{/*          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/tracer:{{ .Values.tracer.image.version }}"*/}}
 {{/*          imagePullPolicy: Always*/}}
 {{/*          ports:*/}}
 {{/*            - containerPort: {{ .Values.tracer.containers.port }}*/}}
