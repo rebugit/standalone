@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "tracer.service.name" . }}
+  labels:
+    app: {{ include "tracer.service.name" . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.tracer.port }}
+      targetPort: {{ include "tracer.container.port" . }}
+      protocol: TCP
+  selector:
+    app: {{ include "tracer.deployment.name" . }}

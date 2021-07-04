@@ -1,22 +1,41 @@
-{{/*apiVersion: apps/v1*/}}
-{{/*kind: Deployment*/}}
-{{/*metadata:*/}}
-{{/*  name: {{ .Values.tracer.deployment.name }}*/}}
-{{/*  labels:*/}}
-{{/*    app: {{ .Values.tracer.deployment.name }}*/}}
-{{/*spec:*/}}
-{{/*  replicas: 1*/}}
-{{/*  selector:*/}}
-{{/*    matchLabels:*/}}
-{{/*      app: {{ .Values.tracer.deployment.name }}*/}}
-{{/*  template:*/}}
-{{/*    metadata:*/}}
-{{/*      labels:*/}}
-{{/*        app: {{ .Values.tracer.deployment.name }}*/}}
-{{/*    spec:*/}}
-{{/*      containers:*/}}
-{{/*        - name: {{ .Values.tracer.containers.name }}*/}}
-{{/*          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/tracer:{{ .Values.tracer.image.version }}"*/}}
-{{/*          imagePullPolicy: Always*/}}
-{{/*          ports:*/}}
-{{/*            - containerPort: {{ .Values.tracer.containers.port }}*/}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tracer.deployment.name" . }}
+  labels:
+    app: {{ include "tracer.deployment.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "tracer.deployment.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "tracer.deployment.name" . }}
+    spec:
+      containers:
+        - name: tracer
+          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/tracer:{{ .Values.tracer.image.version }}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.tracer.port }}
+          env:
+            - name: ENV
+              value: prod
+            - name: POSTGRES_USER
+              value: {{ include "database.user.name" .}}
+            - name: POSTGRES_DB
+              value: {{ include "database.name" .}}
+            - name: POSTGRES_PASSWORD
+              value: {{.Values.database.user.password}}
+            - name: POSTGRES_HOST
+              value: {{ include "database.host" .}}
+            - name: REBUGIT_AUTH_TYPE
+              value: keycloak
+            - name: REBUGIT_AUTH_KEYCLOAK_HOST
+              value: {{ include "authentication.host" .}}
+            - name: REBUGIT_AUTH_KEYCLOAK_REALM
+              value: rebugit
+            - name: REBUGIT_DB_TYPE
+              value: postgres

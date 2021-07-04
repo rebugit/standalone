@@ -30,7 +30,7 @@ database:
 dashboard:
   keycloakUrl: http://localhost/rebugit/keycloak
   authenticationMode: keycloak
-  tracerApiUrl: http://localhost:8080
+  tracerApiUrl: http://localhost/rebugit/api
   port: 3000
   image:
     version: "1624839720"
@@ -45,8 +45,7 @@ tracer:
     requests: { }
     limits: { }
   image:
-    version: "1624839720"
-    repository: public.ecr.aws/g0o0x0q6/tracer
+    version: "1625403231"
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -75,12 +74,14 @@ keycloak:
     enabled: false
     httpGet:
       path: /rebugit/keycloak/auth/realms/master
+      port: http
     initialDelaySeconds: 30
     timeoutSeconds: 30
   livenessProbe:
     enabled: false
     httpGet:
       path: /rebugit/keycloak/auth/realms/master
+      port: http
     initialDelaySeconds: 30
     timeoutSeconds: 30
   ingress:
@@ -100,6 +101,9 @@ keycloak:
 
 postgresql:
   postgresqlPassword: postgres
+  extraEnv:
+    - name: POSTGRES_DATABASE
+      value: rebugit
   image:
     debug: true
     registry: public.ecr.aws
