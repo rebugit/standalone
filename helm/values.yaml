@@ -28,9 +28,7 @@ database:
     limits: { }
 
 dashboard:
-  keycloakUrl: http://localhost/rebugit/keycloak
   authenticationMode: keycloak
-  tracerApiUrl: http://localhost/rebugit/api
   port: 3000
   image:
     version: "1624839720"
@@ -98,6 +96,7 @@ keycloak:
     user: postgres
   postgresql:
     enabled: false
+#  extraEnvVarsCM:
 
 postgresql:
   postgresqlPassword: postgres

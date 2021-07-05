@@ -1,11 +1,13 @@
-{{- define "dashboard.container.port" -}}
-{{- print 8080 -}}
-{{- end -}}
+{{/* List of internal values */}}
+
 {{- define "dashboard.deployment.name" -}}
 {{- print "rebugit-dashboard" -}}
 {{- end -}}
 {{- define "dashboard.service.name" -}}
 {{- print "rebugit-dashboard" -}}
+{{- end -}}
+{{- define "dashboard.container.port" -}}
+{{- print 8080 -}}
 {{- end -}}
 
 {{- define "tracer.deployment.name" -}}
@@ -18,19 +20,7 @@
 {{- print 8080 -}}
 {{- end -}}
 
-{{- define "database.port" -}}
-{{- print 5432 -}}
-{{- end -}}
-{{- define "database.name" -}}
-{{- print "rebugit" -}}
-{{- end -}}
-{{- define "database.user.name" -}}
-{{- print "app" -}}
-{{- end -}}
-{{- define "database.host" -}}
-{{- print "rebugit-postgresql" -}}
+{{- define "default.annotations" -}}
+checksum/config: {{ include (print $.Template.BasePath "/global-config-map.yaml") . | sha256sum }}
 {{- end -}}
 
-{{- define "authentication.host" -}}
-{{- print "http://rebugit-keycloak:8080/rebugit/keycloak" -}}
-{{- end -}}

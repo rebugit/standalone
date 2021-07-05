@@ -11,13 +11,22 @@
 {{/*          imagePullPolicy: Always*/}}
 {{/*          env:*/}}
 {{/*            - name: POSTGRES_ADMIN*/}}
-{{/*              value: postgres*/}}
+{{/*              valueFrom:*/}}
+{{/*                configMapKeyRef:*/}}
+{{/*                  key: database_admin*/}}
+{{/*                  name: rebugit-global-configmap*/}}
 {{/*            - name: POSTGRES_PASSWORD*/}}
 {{/*              value: {{.Values.database.admin.password}}*/}}
 {{/*            - name: POSTGRES_HOST*/}}
-{{/*              value: {{ include "database.host" .}}*/}}
+{{/*              valueFrom:*/}}
+{{/*                configMapKeyRef:*/}}
+{{/*                  key: database_host*/}}
+{{/*                  name: rebugit-global-configmap*/}}
 {{/*            - name: POSTGRES_PORT*/}}
-{{/*              value: {{ include "database.port" .}}*/}}
+{{/*              valueFrom:*/}}
+{{/*                configMapKeyRef:*/}}
+{{/*                  key: database_port*/}}
+{{/*                  name: rebugit-global-configmap*/}}
 {{/*            - name: POSTGRES_USER_PASSWORD*/}}
 {{/*              value: {{.Values.database.user.password}}*/}}
 {{/*      restartPolicy: Never*/}}

@@ -4,6 +4,8 @@ metadata:
   name: {{ include "dashboard.deployment.name" . }}
   labels:
     app: {{ include "dashboard.deployment.name" . }}
+  annotations:
+    {{ include "default.annotations" .}}
 spec:
   replicas: 1
   selector:
@@ -24,10 +26,16 @@ spec:
             - name: REACT_APP_BASE_PATH
               value: /rebugit/web
             - name: REACT_APP_KEYCLOAK_URL
-              value: {{.Values.dashboard.keycloakUrl}}
+              valueFrom:
+                configMapKeyRef:
+                  key: authentication_url
+                  name: rebugit-global-configmap
             - name: REACT_APP_AUTH_MODE
               value: {{.Values.dashboard.authenticationMode}}
             - name: REACT_APP_API_DOMAIN
-              value: {{.Values.dashboard.tracerApiUrl}}
+              valueFrom:
+                configMapKeyRef:
+                  key: tracer_api_url
+                  name: rebugit-global-configmap
           resources:
           {{- toYaml .Values.dashboard.resources | nindent 12}}

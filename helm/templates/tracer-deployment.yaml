@@ -4,6 +4,8 @@ metadata:
   name: {{ include "tracer.deployment.name" . }}
   labels:
     app: {{ include "tracer.deployment.name" . }}
+  annotations:
+    {{ include "default.annotations" .}}
 spec:
   replicas: 1
   selector:
@@ -22,19 +24,34 @@ spec:
             - containerPort: {{ .Values.tracer.port }}
           env:
             - name: ENV
-              value: prod
+              valueFrom:
+                configMapKeyRef:
+                  key: environment
+                  name: rebugit-global-configmap
             - name: POSTGRES_USER
-              value: {{ include "database.user.name" .}}
+              valueFrom:
+                configMapKeyRef:
+                  key: database_username
+                  name: rebugit-global-configmap
             - name: POSTGRES_DB
-              value: {{ include "database.name" .}}
+              valueFrom:
+                configMapKeyRef:
+                  key: database_name
+                  name: rebugit-global-configmap
             - name: POSTGRES_PASSWORD
               value: {{.Values.database.user.password}}
             - name: POSTGRES_HOST
-              value: {{ include "database.host" .}}
+              valueFrom:
+                configMapKeyRef:
+                  key: database_host
+                  name: rebugit-global-configmap
             - name: REBUGIT_AUTH_TYPE
               value: keycloak
             - name: REBUGIT_AUTH_KEYCLOAK_HOST
-              value: {{ include "authentication.host" .}}
+              valueFrom:
+                configMapKeyRef:
+                  key: authentication_internal_url
+                  name: rebugit-global-configmap
             - name: REBUGIT_AUTH_KEYCLOAK_REALM
               value: rebugit
             - name: REBUGIT_DB_TYPE
