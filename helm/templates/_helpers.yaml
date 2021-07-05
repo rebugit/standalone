@@ -1,0 +1,7 @@
+{{- define "isTLSEnabled" -}}
+{{- if .Values.rebugit.tlsEnabled }}
+{{- print "https" -}}
+{{- else -}}
+{{- print "http" -}}
+{{- end -}}
+{{- end -}}

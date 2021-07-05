@@ -31,7 +31,7 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
-                  key: database_username
+                  key: database_user_name
                   name: rebugit-global-configmap
             - name: POSTGRES_DB
               valueFrom:
@@ -39,7 +39,10 @@ spec:
                   key: database_name
                   name: rebugit-global-configmap
             - name: POSTGRES_PASSWORD
-              value: {{.Values.database.user.password}}
+              valueFrom:
+                secretKeyRef:
+                  key: database_user_password
+                  name: rebugit-global-secrets
             - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:

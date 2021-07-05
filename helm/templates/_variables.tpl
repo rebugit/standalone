@@ -21,6 +21,6 @@
 {{- end -}}
 
 {{- define "default.annotations" -}}
-checksum/config: {{ include (print $.Template.BasePath "/global-config-map.yaml") . | sha256sum }}
+checksum/config: {{ include (print $.Template.BasePath "/rebugit-global-configmap.yaml") . | sha256sum }}
 {{- end -}}
 

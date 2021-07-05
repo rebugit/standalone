@@ -3,6 +3,8 @@ namespace: rebugit
 rebugit:
   registry: public.ecr.aws
   repository: g0o0x0q6
+  host: localhost
+  tlsEnabled: false
 
 authentication:
   image:
@@ -14,18 +16,19 @@ authentication:
     requests: { }
     limits: { }
 
-database:
-  image:
-    version: "1625059180"
-  migration:
+postgresql:
+  postgresqlPassword: postgres
+  postgresqlUserPassword: p4zzW0rd
+  postgresqlMigration:
     version: "1625104328"
-  admin:
-    password: postgres
-  user:
-    password: p4zzW0rd
-  resources:
-    requests: { }
-    limits: { }
+  extraEnv:
+    - name: POSTGRES_DATABASE
+      value: rebugit
+  image:
+    registry: public.ecr.aws
+    repository: g0o0x0q6/postgres
+    tag: "1625059180"
+    pullPolicy: Always
 
 dashboard:
   authenticationMode: keycloak
@@ -37,19 +40,12 @@ dashboard:
     limits: { }
 
 tracer:
-  replicaCount: 1
   port: 8080
   resources:
     requests: { }
     limits: { }
   image:
     version: "1625403231"
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
 
 keycloak:
   replicaCount: 1
@@ -96,16 +92,3 @@ keycloak:
     user: postgres
   postgresql:
     enabled: false
-#  extraEnvVarsCM:
-
-postgresql:
-  postgresqlPassword: postgres
-  extraEnv:
-    - name: POSTGRES_DATABASE
-      value: rebugit
-  image:
-    debug: true
-    registry: public.ecr.aws
-    repository: g0o0x0q6/postgres
-    tag: "1625059180"
-    pullPolicy: Always
