@@ -51,8 +51,13 @@ keycloak:
     type: ClusterIP
     port: 8080
   extraEnvVars:
+    # This will make sure that keycloak started from a sub-folder will be properly forwarded
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
+
+    # This will load the initial keycloak config containing the custom realm and client
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.import=/config/realm_config.json -Dkeycloak.profile.feature.upload_scripts=enabled"
   readinessProbe:
     enabled: false
     httpGet:
@@ -81,3 +86,10 @@ keycloak:
     user: postgres
   postgresql:
     enabled: false
+  extraVolumeMounts:
+    - name: realm-config
+      mountPath: /config
+  extraVolumes:
+    - name: realm-config
+      configMap:
+        name: rebugit-keycloak-configmap
