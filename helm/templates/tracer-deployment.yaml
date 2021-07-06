@@ -4,8 +4,7 @@ metadata:
   name: {{ include "tracer.deployment.name" . }}
   labels:
     app: {{ include "tracer.deployment.name" . }}
-  annotations:
-    {{ include "default.annotations" .}}
+  annotations: {{ include "default.annotations" . | nindent 4}}
 spec:
   replicas: 1
   selector:

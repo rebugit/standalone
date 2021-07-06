@@ -6,16 +6,6 @@ rebugit:
   host: localhost
   tlsEnabled: false
 
-authentication:
-  image:
-    version: "1624772760"
-  admin:
-    password: admin
-    user: admin
-  resources:
-    requests: { }
-    limits: { }
-
 postgresql:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
@@ -41,14 +31,13 @@ dashboard:
 
 tracer:
   port: 8080
+  image:
+    version: "1625403231"
   resources:
     requests: { }
     limits: { }
-  image:
-    version: "1625403231"
 
 keycloak:
-  replicaCount: 1
   image:
     registry: public.ecr.aws
     repository: g0o0x0q6/keycloak
