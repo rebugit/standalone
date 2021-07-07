@@ -11,7 +11,7 @@ data:
   database_user_name: "app"
   database_admin_name: "postgres"
 
-  authentication_internal_url: "{{ include "isTLSEnabled" .}}://rebugit-keycloak:8080/rebugit/keycloak"
+  authentication_internal_url: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak"
   authentication_url: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}/rebugit/keycloak"
 
   dasboard_container_port: "8080"

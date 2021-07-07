@@ -5,6 +5,12 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: wait-for-keycloak
+          image: stefanevinance/wait-for-200
+          env:
+            - name: URL
+              value: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
       containers:
         - name: database-migration-job
           image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/migrator:{{.Values.postgresql.postgresqlMigration.version}}"
@@ -35,6 +41,27 @@ spec:
                 secretKeyRef:
                   key: database_user_password
                   name: rebugit-global-secrets
+            - name: KEYCLOAK_ADMIN_USER
+              value: {{.Values.keycloak.auth.adminPassword}}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: {{.Values.keycloak.auth.adminUser}}
+            - name: KEYCLOAK_REALM_NAME
+              value: {{ include "authentication.keycloak.realm.name" .}}
+            - name: KEYCLOAK_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: authentication_internal_url
+                  name: rebugit-global-configmap
+            - name: KEYCLOAK_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: keycloak_user_name
+                  name: rebugit-global-secrets
+            - name: KEYCLOAK_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: keycloak_user_password
+                  name: rebugit-global-secrets
       restartPolicy: Never
-{{/*      ttlSecondsAfterFinished: 100*/}}
+  {{/*      ttlSecondsAfterFinished: 100*/}}
   backoffLimit: 3

@@ -20,6 +20,13 @@
 {{- print 8080 -}}
 {{- end -}}
 
+{{- define "authentication.keycloak.realm.name" -}}
+{{- print "rebugit" -}}
+{{- end -}}
+{{- define "authentication.service.name" -}}
+{{- print "rebugit-keycloak" -}}
+{{- end -}}
+
 {{- define "default.annotations" -}}
 checksum/config: {{ include (print $.Template.BasePath "/rebugit-global-configmap.yaml") . | sha256sum }}
 checksum/secrets: {{ include (print $.Template.BasePath "/rebugit-global-secrets.yaml") . | sha256sum }}

@@ -10,7 +10,7 @@ postgresql:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
   postgresqlMigration:
-    version: "1625104328"
+    version: "1625625998"
   extraEnv:
     - name: POSTGRES_DATABASE
       value: rebugit
@@ -47,6 +47,8 @@ keycloak:
     adminPassword: admin
     adminUser: admin
     createAdminUser: true
+    userName: matteo@hirvitek.com
+    userPassword: 123password
   service:
     type: ClusterIP
     port: 8080
@@ -57,7 +59,7 @@ keycloak:
 
     # This will load the initial keycloak config containing the custom realm and client
     - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.import=/config/realm_config.json -Dkeycloak.profile.feature.upload_scripts=enabled"
+      value: "-Dkeycloak.import=/config/realm_config.json"
   readinessProbe:
     enabled: false
     httpGet:
