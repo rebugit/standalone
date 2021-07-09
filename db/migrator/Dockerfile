@@ -8,6 +8,7 @@ RUN unset GOPATH && go mod tidy && go mod download
 
 FROM stage-01 AS stage-02
 COPY main.go /app/main.go
+COPY keycloak.go /app/keycloak.go
 WORKDIR /app
 RUN unset GOPATH && go build -o ./main .
 
