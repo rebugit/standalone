@@ -10,7 +10,7 @@ postgresql:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
   postgresqlMigration:
-    version: "1625625998"
+    version: "1625795745"
   extraEnv:
     - name: POSTGRES_DATABASE
       value: rebugit
@@ -48,7 +48,7 @@ keycloak:
     adminUser: admin
     createAdminUser: true
     userName: matteo@hirvitek.com
-    userPassword: 123password
+    userPassword: mypassword
   service:
     type: ClusterIP
     port: 8080
@@ -56,10 +56,6 @@ keycloak:
     # This will make sure that keycloak started from a sub-folder will be properly forwarded
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
-
-    # This will load the initial keycloak config containing the custom realm and client
-    - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.import=/config/realm_config.json"
   readinessProbe:
     enabled: false
     httpGet:
@@ -88,10 +84,3 @@ keycloak:
     user: postgres
   postgresql:
     enabled: false
-  extraVolumeMounts:
-    - name: realm-config
-      mountPath: /config
-  extraVolumes:
-    - name: realm-config
-      configMap:
-        name: rebugit-keycloak-configmap

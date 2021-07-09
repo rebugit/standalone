@@ -62,6 +62,8 @@ spec:
                 secretKeyRef:
                   key: keycloak_user_password
                   name: rebugit-global-secrets
+            - name: REBUGIT_HOST
+              value: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}"
       restartPolicy: Never
   {{/*      ttlSecondsAfterFinished: 100*/}}
   backoffLimit: 3
