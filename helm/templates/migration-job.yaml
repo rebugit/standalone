@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: database-migration-job
+  namespace: {{.Release.Namespace}}
 spec:
   template:
     spec:

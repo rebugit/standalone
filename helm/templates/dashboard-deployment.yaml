@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "dashboard.deployment.name" . }}
+  namespace: {{.Release.Namespace}}
   labels:
     app: {{ include "dashboard.deployment.name" . }}
   annotations: {{ include "default.annotations" . | nindent 4}}
@@ -12,6 +13,7 @@ spec:
       app: {{ include "dashboard.deployment.name" . }}
   template:
     metadata:
+      namespace: {{.Release.Namespace}}
       labels:
         app: {{ include "dashboard.deployment.name" . }}
     spec:

@@ -21,3 +21,5 @@
 .idea/
 *.tmproj
 .vscode/
+deploy-local.sh
+rebugit-*.tgz
