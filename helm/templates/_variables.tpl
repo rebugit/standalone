@@ -19,6 +19,9 @@
 {{- define "tracer.container.port" -}}
 {{- print 8080 -}}
 {{- end -}}
+{{- define "tracer.network.policy.name" -}}
+{{- print "rebugit-tracer-network" -}}
+{{- end -}}
 
 {{- define "authentication.keycloak.realm.name" -}}
 {{- print "rebugit" -}}
