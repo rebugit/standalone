@@ -14,6 +14,10 @@ spec:
   template:
     metadata:
       namespace: {{.Release.Namespace}}
+      annotations:
+      {{- range $k, $v := .Values.dashboard.podCommonAnnotations }}
+        {{ $k }}: {{ $v -}}
+      {{ end }}
       labels:
         app: {{ include "dashboard.deployment.name" . }}
     spec:

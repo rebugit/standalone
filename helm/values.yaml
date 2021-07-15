@@ -20,6 +20,7 @@ postgresql:
 
 dashboard:
   authenticationMode: keycloak
+  podCommonAnnotations: {}
   port: 3000
   image:
     version: "1624839720"
@@ -29,6 +30,12 @@ dashboard:
 
 tracer:
   port: 8080
+
+  # They will be injected in the deployment pod spec
+  # linkerd.io/inject: enabled
+  # nginx.ingress/rewrite: $1
+  # ...
+  podCommonAnnotations: {}
   image:
     version: "1625403231"
   resources:

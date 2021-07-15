@@ -6,7 +6,7 @@ metadata:
 data:
   environment: "prod"
 
-  database_host: "rebugit-postgresql.rebugit.svc.cluster.local"
+  database_host: "rebugit-postgresql"
   database_port: "5432"
   database_name: "rebugit"
   database_user_name: "app"
