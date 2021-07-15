@@ -1,0 +1,14 @@
+rebugit:
+  tracer:
+    podCommonAnnotations:
+      linkerd.io/inject: enabled
+  dashboard:
+    podCommonAnnotations:
+      linkerd.io/inject: enabled
+  postgresql:
+    primary:
+      podAnnotations:
+        linkerd.io/inject: enabled
+  keycloak:
+    podAnnotations:
+      linkerd.io/inject: enabled
