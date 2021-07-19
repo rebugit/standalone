@@ -12,3 +12,5 @@ rebugit:
   keycloak:
     podAnnotations:
       linkerd.io/inject: enabled
+      config.linkerd.io/skip-inbound-ports: "7800" # skip keycloak cluster discovery
+      config.linkerd.io/skip-outbound-ports: "7800"

@@ -70,3 +70,5 @@ spec:
               value: rebugit
             - name: REBUGIT_DB_TYPE
               value: postgres
+{{/*            - name: REBUGIT_TLS_ENABLED*/}}
+{{/*              value: {{.Values.postgresql.tls.enabled}}*/}}
