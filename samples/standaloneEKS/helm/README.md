@@ -1,3 +1,5 @@
 # Standalone EKS deployment
+Standalone cluster
 
-With mTLS, LinkerD and Istio
+- LinkerD
+- AWS Nginx ingress controller 

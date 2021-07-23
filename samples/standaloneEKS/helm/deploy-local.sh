@@ -1,3 +1,4 @@
+# This script is for testing only
 export project_root="$HOME"/Development/Rebugit/rbi-standalone
 export project_dir=samples/standaloneEKS/helm
 

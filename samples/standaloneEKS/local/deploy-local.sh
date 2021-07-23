@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Deploy the setup in a kind cluster, this is only for testing, you might need to disable
+# the AWS nginx loadbalancer
+
 # Create kind cluster
 kind create cluster --config=cluster.yaml
 
