@@ -52,7 +52,7 @@ keycloak:
     adminPassword: admin
     adminUser: admin
     createAdminUser: true
-    userName: matteo@hirvitek.com
+    userName: email@example.com
     userPassword: mypassword
   service:
     type: ClusterIP

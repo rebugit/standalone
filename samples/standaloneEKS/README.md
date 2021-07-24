@@ -3,3 +3,7 @@ Standalone cluster
 
 - LinkerD
 - AWS Nginx ingress controller 
+
+### TODO
+
+- Encryption

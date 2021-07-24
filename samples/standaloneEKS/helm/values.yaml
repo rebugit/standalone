@@ -6,10 +6,13 @@ rebugit:
     podCommonAnnotations:
       linkerd.io/inject: enabled
   postgresql:
+    postgresqlPassword:
     primary:
       podAnnotations:
         linkerd.io/inject: enabled
   keycloak:
+    auth:
+      userName:
     podAnnotations:
       linkerd.io/inject: enabled
       config.linkerd.io/skip-inbound-ports: "7800" # skip keycloak cluster discovery
