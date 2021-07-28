@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/keycloak-js@14.0.0/dist/keycloak.min.js"></script>
+<script>
+  function initKeycloak() {
+    const keycloak = new Keycloak({
+      url: 'http://localhost:9000/auth',
+      realm: 'rebugit',
+      clientId: 'test-client'
+    });
+    keycloak.init({onLoad: 'login-required'}).then(function (authenticated) {
+      alert(authenticated ? 'authenticated' : 'not authenticated');
+      console.log(keycloak.token)
+    }).catch(function () {
+      alert('failed to initialize');
+    });
+  }
+</script>
+<body onload="initKeycloak()">
+<h1>Hello</h1>
+</body>
+</html>

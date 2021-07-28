@@ -37,7 +37,7 @@ tracer:
   # ...
   podCommonAnnotations: {}
   image:
-    version: "1625403231"
+    version: "1627434491"
   resources:
     requests: { }
     limits: { }

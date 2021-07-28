@@ -17,8 +17,6 @@ AWS_REGION=${AWS_REGION:-$current_region}
 echo "Profile set to: $AWS_PROFILE"
 echo "Region set to: $AWS_REGION"
 
-exit 0
-
 stty -echo
 echo "Password will be managed by Secret manager"
 echo "Input Postgres admin password"

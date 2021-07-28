@@ -1,0 +1,25 @@
+{
+  "name": "rbi-standalone",
+  "version": "1.0.0",
+  "description": "## Helm",
+  "main": "release.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rebugit/rbi-standalone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rebugit/rbi-standalone/issues"
+  },
+  "homepage": "https://github.com/rebugit/rbi-standalone#readme",
+  "dependencies": {
+    "dockerode": "^3.3.0",
+    "execa": "^5.1.1",
+    "semantic-release": "^17.4.4"
+  }
+}

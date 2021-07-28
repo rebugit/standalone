@@ -1,0 +1,36 @@
+version: 0.2
+env:
+  git-credential-helper: yes
+  secrets-manager:
+    GITHUB_TOKEN: "github:GITHUB_TOKEN"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_REPOSITORY_URL}
+      - WORKLOADS="keycloak postgres migrator"
+  build:
+    commands:
+      - echo Build started on `date`
+      - GITHUB_TOKEN=${GITHUB_TOKEN} GITHUB_REPOSITORY_URL=${GITHUB_REPOSITORY_URL} ENV=${ENV} node release.js
+      - VERSION=$(cat version)
+      - |
+        for image in $WORKLOADS
+        do
+          echo Building the Docker image $image
+          echo $IMAGE_URI
+          IMAGE_URI=${image}:${VERSION}
+          docker build -t "${IMAGE_URI}" .
+          docker tag "${IMAGE_URI}" ${ECR_REPOSITORY_URL}/"${IMAGE_URI}"
+        done
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push ${ECR_REPOSITORY_URL}/"${IMAGE_URI}"
