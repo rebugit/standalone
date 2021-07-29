@@ -2,10 +2,12 @@
 
 const execa = require('execa')
 const semanticRelease = require('semantic-release')
-const fs = require('fs')
 const Docker = require('dockerode');
 const path = require("path");
+const AWS = require("aws-sdk");
+
 const docker = new Docker({socketPath: '/var/run/docker.sock'});
+const ecr = new AWS.ECRPUBLIC({region: process.env.AWS_REGION, apiVersion: '2020-10-30'})
 
 const workloads = [
   {
@@ -15,7 +17,7 @@ const workloads = [
   }
 ]
 
-async function fetch() {
+async function getLatestVersion() {
   const {stdout} = await execa('git', ['tag', '--points-at', 'HEAD'])
   return stdout
 }
@@ -55,7 +57,7 @@ async function release() {
       console.log(`The release was published with plugin "${release.pluginName}".`);
     }
   } else {
-    const tag = await fetch()
+    const tag = await getLatestVersion()
     const version = tag.replace('v', '')
     console.log(`No release published. Current version: ${version}`);
     return version
@@ -70,10 +72,48 @@ async function build(version, workload) {
     {t: `${workload.imageName}:${version}`},
   )
 
+  await attachSTOUTtoStream(stream)
+  console.log(`Building ${workload.imageName} DONE`)
+}
+
+async function dockerLogin() {
+  console.log("Get auth token from ecr public...")
+  const login = await ecr.getAuthorizationToken().promise();
+
+  return {
+    auth: "",
+    username: 'AWS',
+    password: Buffer
+      .from(login.authorizationData.authorizationToken, 'base64')
+      .toString('utf-8')
+      .replace('AWS:', ''),
+    serveraddress: process.env.ECR_REPOSITORY_URL
+  };
+}
+
+async function pushImages(tag, workload, auth) {
+  const repo = process.env.ECR_REPOSITORY_URL
+  const sourceImage = `${workload.imageName}:${tag}`
+  const targetImage = `${repo}/${sourceImage}`
+  const image = await docker.getImage(sourceImage);
+
+  console.log("Tagging image:", sourceImage, "==>", targetImage)
+
+  await image.tag({name: sourceImage, repo: `${repo}/${workload.imageName}`, tag: tag})
+
+  const taggedImage = await docker.getImage(targetImage);
+
+  const stream = await taggedImage.push({name: targetImage, authconfig: auth});
+  await attachSTOUTtoStream(stream)
+  console.log(`Pushing ${targetImage} DONE`)
+}
+
+async function attachSTOUTtoStream(stream) {
   await new Promise((resolve, reject) => {
     const pipe = stream.pipe(process.stdout, {
       end: true
     });
+
     pipe.on('end', () => {
       resolve()
     })
@@ -92,25 +132,18 @@ async function build(version, workload) {
   })
 }
 
-async function buildDocker(version) {
-  const jobs = []
+async function pipeline() {
+  const version = await release();
+  const auth = await dockerLogin();
 
   for (const workloadsKey in workloads) {
     const workload = workloads[workloadsKey]
     await build(version, workload)
+    await pushImages(version, workload, auth)
   }
-
-  await Promise.all(jobs)
 }
 
-buildDocker("2.0.1").then(res => {
-  console.log(res)
+pipeline().then().catch(e => {
+  console.error(e)
+  process.exit(1)
 })
-
-// release().then(v => {
-//   console.log(v)
-//   fs.writeFileSync('version', v, 'utf8')
-// }).catch(e => {
-//   console.error('The automated release failed with %O', e)
-//   process.exit(1)
-// })
