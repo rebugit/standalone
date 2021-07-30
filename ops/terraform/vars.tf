@@ -12,7 +12,7 @@ variable "project" {
     github_repository_name = "standalone"
     github_organization_name = "rebugit"
     github_branch = "master"
-    ecr_repository_url = "public.ecr.aws/c3m8k8v9"
+    ecr_repository_url = "public.ecr.aws/rebugit"
   }
 }
 

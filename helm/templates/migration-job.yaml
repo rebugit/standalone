@@ -43,9 +43,9 @@ spec:
                   key: database_user_password
                   name: rebugit-global-secrets
             - name: KEYCLOAK_ADMIN_USER
-              value: {{.Values.keycloak.auth.adminPassword}}
-            - name: KEYCLOAK_ADMIN_PASSWORD
               value: {{.Values.keycloak.auth.adminUser}}
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: {{.Values.keycloak.auth.adminPassword}}
             - name: KEYCLOAK_REALM_NAME
               value: {{ include "authentication.keycloak.realm.name" .}}
             - name: KEYCLOAK_HOST

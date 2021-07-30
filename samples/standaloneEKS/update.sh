@@ -2,6 +2,7 @@
 
 set -e
 
+#export KUBECONFIG=$HOME/.kube/rebugit-eks
 SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 NAMESPACE=rebugit
 
@@ -15,12 +16,10 @@ userName=$(echo "$CREDENTIALS" | jq -r '.KEYCLOAK_USER_NAME')
 userPassword=$(echo "$CREDENTIALS" | jq -r '.KEYCLOAK_USER_PASSWORD')
 
 echo "Secrets retrieved"
-echo "Creating namespace: $NAMESPACE"
-kubectl create namespace $NAMESPACE
 
 echo "Deploying helm chart..."
 
-helm upgrade -i --force rebugit -n rebugit "$SCRIPT_PATH"/../helm/ -f "$SCRIPT_PATH"/../helm/values.yaml \
+helm upgrade -i rebugit -n $NAMESPACE "$SCRIPT_PATH"/../helm/ -f "$SCRIPT_PATH"/../helm/values.yaml \
   --set rebugit.postgresql.postgresqlPassword="$postgresqlPassword" \
   --set rebugit.postgresql.postgresqlUserPassword="$postgresqlUserPassword" \
   --set rebugit.keycloak.auth.adminPassword="$adminPassword" \

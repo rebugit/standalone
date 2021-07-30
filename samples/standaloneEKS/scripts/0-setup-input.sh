@@ -2,6 +2,8 @@
 
 # Temporary CLI
 
+set -e
+
 current_region=$(aws configure get region --profile="$AWS_PROFILE")
 current_profile=${AWS_PROFILE:-default}
 
@@ -42,7 +44,7 @@ export KEYCLOAK_USER_PASSWORD=$KEYCLOAK_USER_PASSWORD
 export KEYCLOAK_USER_NAME=$KEYCLOAK_USER_NAME
 
 export AWS_REGION=$AWS_REGION
-export AWS_PROFILE=AWS_PROFILE
+export AWS_PROFILE=$AWS_PROFILE
 export AWS_SECRET_MANAGER_NAME=rebugit/secrets
 
 export KUBECONFIG=$HOME/.kube/rebugit-eks

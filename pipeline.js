@@ -59,8 +59,8 @@ async function release() {
   } else {
     const tag = await getLatestVersion()
     const version = tag.replace('v', '')
-    console.log(`No release published. Current version: ${version}`);
-    return version
+    console.log(`No release published. Current version: ${version}, DONE`);
+    return undefined
   }
 
   return version
@@ -134,6 +134,10 @@ async function attachSTOUTtoStream(stream) {
 
 async function pipeline() {
   const version = await release();
+  if (!version) {
+    return
+  }
+
   const auth = await dockerLogin();
 
   for (const workloadsKey in workloads) {

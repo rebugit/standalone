@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+set -e
+
+SCRIPT_PATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
 echo "Creating secrets in AWS Secret manager..."
 secrets_json=$( jq -n \
                   --arg pg_password "$POSTGRES_PASSWORD" \
@@ -7,7 +11,7 @@ secrets_json=$( jq -n \
                   --arg keycloak_admin_password "$KEYCLOAK_ADMIN_PASSWORD" \
                   --arg keycloak_user_password "$KEYCLOAK_USER_PASSWORD" \
                   --arg keycloak_user_name "$KEYCLOAK_USER_NAME" \
-                  '{POSTGRES_PASSWORD: $pg_password, POSTGRES_USER_PASSWORD: $pg_user_password, KEYCLOAK_ADMIN_PASSWORD: $keycloak_admin_password, KEYCLOAK_USER_PASSWORD: $keycloak_user_password, KEYCLOAK_USER_NAME: keycloak_user_name }' )
+                  '{POSTGRES_PASSWORD: $pg_password, POSTGRES_USER_PASSWORD: $pg_user_password, KEYCLOAK_ADMIN_PASSWORD: $keycloak_admin_password, KEYCLOAK_USER_PASSWORD: $keycloak_user_password, KEYCLOAK_USER_NAME: $keycloak_user_name }' )
 
 aws secretsmanager create-secret --name "$AWS_SECRET_MANAGER_NAME" \
     --description "Rebugit Postgres and Keycloak secrets" \

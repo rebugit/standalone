@@ -5,6 +5,7 @@ rebugit:
   tlsEnabled: false
 
 postgresql:
+  postgresqlPostgresPassword:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
   postgresqlMigration:
@@ -33,7 +34,6 @@ tracer:
 
   # They will be injected in the deployment pod spec
   # linkerd.io/inject: enabled
-  # nginx.ingress/rewrite: $1
   # ...
   podCommonAnnotations: {}
   image:
@@ -62,7 +62,7 @@ keycloak:
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
 
-  # Those probes comes from the Bitnami chart and they have issues
+  # Those probes come from the Bitnami chart, and they have issues
   readinessProbe:
     enabled: false
   livenessProbe:

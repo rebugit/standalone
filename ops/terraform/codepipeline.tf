@@ -29,6 +29,7 @@ resource "aws_codepipeline" "tracer_image" {
         ConnectionArn = var.codestar_connection_arn
         FullRepositoryId = "${var.project.github_organization_name}/${var.project.github_repository_name}"
         BranchName = var.project.github_branch
+        OutputArtifactFormat = "CODEBUILD_CLONE_REF"
       }
     }
   }

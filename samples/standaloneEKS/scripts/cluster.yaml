@@ -3,8 +3,8 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: kong-care
-  region: ap-southeast-1
+  name: rebugit-standalone
+  region: us-east-1
   version: "1.20"
 
 managedNodeGroups:
