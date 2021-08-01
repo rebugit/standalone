@@ -20,3 +20,4 @@ helm/rebugit-*.tgz
 __test__
 node_modules
 ops/terraform/.terraform
+docs/

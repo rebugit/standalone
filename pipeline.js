@@ -5,6 +5,13 @@ const semanticRelease = require('semantic-release')
 const Docker = require('dockerode');
 const path = require("path");
 const AWS = require("aws-sdk");
+const ghpages = require('gh-pages');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const yaml = require('js-yaml');
+const fs = require('fs');
+const fsPromises = require('fs').promises;
+
 
 const docker = new Docker({socketPath: '/var/run/docker.sock'});
 const ecr = new AWS.ECRPUBLIC({region: process.env.AWS_REGION, apiVersion: '2020-10-30'})
@@ -132,6 +139,53 @@ async function attachSTOUTtoStream(stream) {
   })
 }
 
+async function helm(version) {
+  const chartDomain = "https://rebugit.github.io/standalone"
+  // version chart
+  console.log("Versioning helm chart")
+  const filePath = path.join(__dirname, "helm/Chart.yaml")
+  const valuesYaml = await fsPromises.readFile(filePath, 'utf8');
+  const values = yaml.load(valuesYaml);
+  values.version = version
+  const newValues = yaml.dump(values)
+  await fsPromises.writeFile(filePath, newValues)
+
+  // build chart: helm dependency update && helm package . -n rebugit
+  console.log("Updating, packaging and creating chart index")
+  const {stdout, stderr} = await exec(
+    `helm dependency update helm/ && helm package helm/ -d docs/ && helm repo index docs --url ${chartDomain}`
+  );
+  console.log(stdout);
+  console.log(stderr);
+
+  // Copy the CNAME
+  console.log("Copying assets to docs folder")
+  await exec(
+    `cp ops/CNAME docs/ && cp ops/index.html docs/`
+  );
+
+  // Push everything with ghpages
+  console.log("Deploying to github")
+  const publishing = () => new Promise((resolve, reject) => {
+    ghpages.publish(
+      'docs',
+      // {
+      //   repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL}.git`
+      // },
+      function (err) {
+        if (err) {
+          return reject(err)
+        }
+
+        console.log("Chart has been published")
+        return resolve()
+      }
+    );
+  })
+
+  await publishing()
+}
+
 async function pipeline() {
   const version = await release();
   if (!version) {
@@ -145,6 +199,8 @@ async function pipeline() {
     await build(version, workload)
     await pushImages(version, workload, auth)
   }
+
+  await helm(version)
 }
 
 pipeline().then().catch(e => {
