@@ -23,7 +23,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: keycloak
     version: 3.1.1
-    repository: file://charts/keycloak-3.1.1.tgz
+    repository: file://../authentication/keycloak/helm/keycloak
   - name: postgresql
     version: 10.8.0
     repository: https://charts.bitnami.com/bitnami

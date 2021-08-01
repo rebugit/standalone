@@ -19,7 +19,6 @@ echo "Creating namespace: $NAMESPACE"
 kubectl create namespace $NAMESPACE
 
 echo "Deploying helm chart..."
-
 helm upgrade -i --force rebugit -n rebugit "$SCRIPT_PATH"/../helm/ -f "$SCRIPT_PATH"/../helm/values.yaml \
   --set rebugit.postgresql.postgresqlPassword="$postgresqlPassword" \
   --set rebugit.postgresql.postgresqlUserPassword="$postgresqlUserPassword" \

@@ -1,6 +1,9 @@
 dependencies:
+- name: keycloak
+  repository: file://../authentication/keycloak/helm/keycloak
+  version: 3.1.1
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 10.8.0
-digest: sha256:4867d27a33a0ebcf8d729ba4bd480fb74723fd66d105de0e2dec7292f952c112
-generated: "2021-07-30T11:20:51.349168125+07:00"
+digest: sha256:b4e2dc762feb5fd4f1409cef2ee7f19c417f6484227c07744e80d1206abfd10d
+generated: "2021-07-31T13:31:24.72778886+07:00"
