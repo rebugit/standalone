@@ -169,9 +169,9 @@ async function helm(version) {
   const publishing = () => new Promise((resolve, reject) => {
     ghpages.publish(
       'docs',
-      // {
-      //   repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL}.git`
-      // },
+      {
+        repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL.replace("https://github.com/", "")}`
+      },
       function (err) {
         if (err) {
           return reject(err)
