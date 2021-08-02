@@ -14,5 +14,5 @@ dependencies:
     version: 3.1.1
     repository: file://../authentication/keycloak/helm/keycloak
   - name: postgresql
-    version: 10.8.0
+    version: 10.5.1
     repository: https://charts.bitnami.com/bitnami

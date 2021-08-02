@@ -5,7 +5,6 @@ rebugit:
   tlsEnabled: false
 
 postgresql:
-  postgresqlPostgresPassword:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
   postgresqlMigration:
