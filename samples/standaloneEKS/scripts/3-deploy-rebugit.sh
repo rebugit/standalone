@@ -18,8 +18,11 @@ echo "Secrets retrieved"
 echo "Creating namespace: $NAMESPACE"
 kubectl create namespace $NAMESPACE
 
+echo "Adding rebugit helm repository"
+helm repo add rebugit https://charts.rebugit.com
+
 echo "Deploying helm chart..."
-helm upgrade -i --force rebugit -n rebugit "$SCRIPT_PATH"/../helm/ -f "$SCRIPT_PATH"/../helm/values.yaml \
+helm upgrade -i rebugit -n rebugit rebugit/rebugit -f "$SCRIPT_PATH"/rebugit-values.yaml \
   --set rebugit.postgresql.postgresqlPassword="$postgresqlPassword" \
   --set rebugit.postgresql.postgresqlUserPassword="$postgresqlUserPassword" \
   --set rebugit.keycloak.auth.adminPassword="$adminPassword" \
