@@ -9,9 +9,7 @@ const ghpages = require('gh-pages');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const yaml = require('js-yaml');
-const fs = require('fs');
 const fsPromises = require('fs').promises;
-
 
 const docker = new Docker({socketPath: '/var/run/docker.sock'});
 const ecr = new AWS.ECRPUBLIC({region: process.env.AWS_REGION, apiVersion: '2020-10-30'})
@@ -21,6 +19,16 @@ const workloads = [
     name: 'authentication',
     path: 'authentication/keycloak',
     imageName: 'keycloak'
+  },
+  {
+    name: 'migrator',
+    path: 'db/migrator',
+    imageName: 'migrator'
+  },
+  {
+    name: 'postgres',
+    path: 'db/postgres',
+    imageName: 'postgres'
   }
 ]
 
@@ -137,6 +145,27 @@ async function attachSTOUTtoStream(stream) {
       resolve()
     })
   })
+}
+
+async function versionImages(version) {
+  const filePath = path.join(__dirname, "helm/values.yaml")
+  const valuesYaml = await fsPromises.readFile(filePath, 'utf8');
+  const values = yaml.load(valuesYaml);
+
+
+  values.postgresql.postgresqlMigration.version = version
+  values.postgresql.image.tag = version
+  values.keycloak.image.tag = version
+
+
+  const newValues = yaml.dump(values)
+  await fsPromises.writeFile(filePath, newValues)
+
+  const {stdout, stderr} = await exec(
+    `git add helm/values.yaml && git commit -m "chore(): bump images version to ${version}" && git push origin master`
+  );
+  console.log(stdout);
+  console.log(stderr);
 }
 
 async function helm(version) {
