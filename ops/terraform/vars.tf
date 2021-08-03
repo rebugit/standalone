@@ -36,3 +36,11 @@ variable "codebuild_role_arn" {
   type = string
   default = "arn:aws:iam::726268367460:role/codebuild_images"
 }
+variable "GITHUB_USERNAME" {
+  type = string
+  sensitive = true
+}
+variable "GITHUB_EMAIL" {
+  type = string
+  sensitive = true
+}

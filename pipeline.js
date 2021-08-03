@@ -170,7 +170,11 @@ async function helm(version) {
     ghpages.publish(
       'docs',
       {
-        repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL.replace("https://github.com/", "")}`
+        repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL.replace("https://github.com/", "")}`,
+        user: {
+          name: process.env.GITHUB_USERNAME,
+          email: process.env.GITHUB_EMAIL
+        }
       },
       function (err) {
         if (err) {

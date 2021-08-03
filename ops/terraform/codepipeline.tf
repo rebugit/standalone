@@ -76,6 +76,16 @@ resource "aws_codebuild_project" "tracer_image" {
       name = "ENV"
       value = "prod"
     }
+
+    environment_variable {
+      name = "GITHUB_EMAIL"
+      value = var.GITHUB_EMAIL
+    }
+
+    environment_variable {
+      name = "GITHUB_USERNAME"
+      value = var.GITHUB_USERNAME
+    }
   }
   source {
     type = "CODEPIPELINE"
