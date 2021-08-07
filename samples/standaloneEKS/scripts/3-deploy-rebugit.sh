@@ -15,14 +15,12 @@ userName=$(echo "$CREDENTIALS" | jq -r '.KEYCLOAK_USER_NAME')
 userPassword=$(echo "$CREDENTIALS" | jq -r '.KEYCLOAK_USER_PASSWORD')
 
 echo "Secrets retrieved"
-echo "Creating namespace: $NAMESPACE"
-kubectl create namespace $NAMESPACE || #Skip if already exists
 
 echo "Adding rebugit helm repository"
 helm repo add rebugit https://charts.rebugit.com
 
 echo "Deploying helm chart..."
-helm upgrade -i rebugit -n rebugit rebugit/rebugit -f "$SCRIPT_PATH"/rebugit-values.yaml \
+helm upgrade -i rebugit -n rebugit rebugit/rebugit -f "$SCRIPT_PATH"/rebugit-values.yaml --create-namespace \
   --set postgresql.postgresqlPassword="$postgresqlPassword" \
   --set postgresql.postgresqlUserPassword="$postgresqlUserPassword" \
   --set keycloak.auth.adminPassword="$adminPassword" \
