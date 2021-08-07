@@ -29,8 +29,8 @@ spec:
               value: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
       containers:
         - name: tracer
-          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/tracer:{{ .Values.tracer.image.version }}"
-          imagePullPolicy: Always
+          image: "{{.Values.tracer.image.registry}}/{{.Values.tracer.image.repository}}:{{ .Values.tracer.image.version }}"
+          imagePullPolicy: {{.Values.tracer.image.pullPolicy}}
           ports:
             - containerPort: {{ .Values.tracer.port }}
           env:

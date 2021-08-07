@@ -1,6 +1,4 @@
 rebugit:
-  registry: public.ecr.aws
-  repository: g0o0x0q6
   host: localhost
   tlsEnabled: false
 
@@ -8,14 +6,17 @@ postgresql:
   postgresqlPassword: postgres
   postgresqlUserPassword: p4zzW0rd
   postgresqlMigration:
-    version: "1625795745"
+    registry: public.ecr.aws
+    repository: rebugit/migrator
+    version: "1.0.4"
+    pullPolicy: Always
   extraEnv:
     - name: POSTGRES_DATABASE
       value: rebugit
   image:
     registry: public.ecr.aws
-    repository: g0o0x0q6/postgres
-    tag: "1625059180"
+    repository: rebugit/postgres
+    tag: "1.0.4"
     pullPolicy: Always
 
 dashboard:
@@ -23,7 +24,10 @@ dashboard:
   podCommonAnnotations: {}
   port: 3000
   image:
-    version: "1624839720"
+    registry: public.ecr.aws
+    repository: rebugit/dashboard
+    version: "1.0.6"
+    pullPolicy: Always
   resources:
     requests: { }
     limits: { }
@@ -32,11 +36,12 @@ tracer:
   port: 8080
 
   # They will be injected in the deployment pod spec
-  # linkerd.io/inject: enabled
-  # ...
   podCommonAnnotations: {}
   image:
-    version: "1627434491"
+    registry: public.ecr.aws
+    repository: rebugit/tracer
+    version: "0.1.0"
+    pullPolicy: Always
   resources:
     requests: { }
     limits: { }
@@ -44,8 +49,8 @@ tracer:
 keycloak:
   image:
     registry: public.ecr.aws
-    repository: g0o0x0q6/keycloak
-    tag: "1624772760"
+    repository: rebugit/keycloak
+    tag: "1.0.4"
     pullPolicy: Always
   auth:
     adminPassword: admin
