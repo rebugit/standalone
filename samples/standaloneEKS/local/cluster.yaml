@@ -1,10 +1,18 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  apiServerAddress: "192.168.0.102"
+  apiServerPort: 6443
 nodes:
   - role: control-plane
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration
+        imageGCHighThresholdPercent: 70
+        evictionHard:
+          nodefs.available: "0%"
+          nodefs.inodesFree: "0%"
+          imagefs.available: "70%"
         nodeRegistration:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"

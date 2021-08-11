@@ -23,8 +23,8 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/rebugit/dashboard:{{.Values.dashboard.image.version}}"
-          imagePullPolicy: Always
+          image: "{{.Values.dashboard.image.registry}}/{{.Values.dashboard.image.repository}}:{{.Values.dashboard.image.version}}"
+          imagePullPolicy: {{.Values.dashboard.image.pullPolicy}}
           ports:
             - containerPort: {{ include "dashboard.container.port" . }}
           env:

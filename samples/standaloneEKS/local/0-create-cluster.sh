@@ -4,7 +4,7 @@
 # the AWS nginx loadbalancer
 
 # Create kind cluster
-kind create cluster --config=cluster.yaml
+kind create cluster --name rebugit-standalone --config=cluster.yaml
 
 # Install nginx ingress
 echo "Installing nginx ingress controller"

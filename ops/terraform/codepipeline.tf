@@ -4,7 +4,6 @@ resource "aws_codepipeline" "tracer_image" {
 
   tags = {
     project = "rebugit"
-    service = "tracer"
     env = "prod"
     type = "ops"
     description = "Codepipeline for standalone images"

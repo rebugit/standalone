@@ -82,14 +82,17 @@ async function release() {
 }
 
 async function build(version, workload) {
+  const image = `${workload.imageName}:${version}`
   const stream = await docker.buildImage(
     {context: path.join(__dirname, workload.path)},
-    {t: `${workload.imageName}:${version}`},
+    {t: image},
   )
 
   await attachSTOUTtoStream(stream)
   console.log(`Building ${workload.imageName} DONE`)
+  return image
 }
+
 
 async function dockerLogin() {
   console.log("Get auth token from ecr public...")
@@ -106,21 +109,33 @@ async function dockerLogin() {
   };
 }
 
-async function pushImages(tag, workload, auth) {
+async function tagImage(imageToTag, tag) {
+  const imageName = imageToTag.split(':')[0]
   const repo = process.env.ECR_REPOSITORY_URL
-  const sourceImage = `${workload.imageName}:${tag}`
-  const targetImage = `${repo}/${sourceImage}`
-  const image = await docker.getImage(sourceImage);
 
-  console.log("Tagging image:", sourceImage, "==>", targetImage)
+  const taggedImage = `${repo}/${imageName}:${tag}`
+  const image = await docker.getImage(imageToTag);
 
-  await image.tag({name: sourceImage, repo: `${repo}/${workload.imageName}`, tag: tag})
+  console.log("Tagging image:", imageToTag, "==>", taggedImage)
 
-  const taggedImage = await docker.getImage(targetImage);
+  await image.tag({
+    name: imageToTag,
+    repo: `${repo}/${imageName}`,
+    tag
+  })
 
-  const stream = await taggedImage.push({name: targetImage, authconfig: auth});
+  const taggedImageObj = await docker.getImage(taggedImage);
+
+  return {
+    taggedImageObj,
+    taggedImage
+  }
+}
+
+async function pushImage(imageObj, imageFullName, auth) {
+  const stream = await imageObj.push({name: imageFullName, authconfig: auth});
   await attachSTOUTtoStream(stream)
-  console.log(`Pushing ${targetImage} DONE`)
+  console.log(`Pushing ${imageFullName} DONE`)
 }
 
 async function attachSTOUTtoStream(stream) {
@@ -145,27 +160,6 @@ async function attachSTOUTtoStream(stream) {
       resolve()
     })
   })
-}
-
-async function versionImages(version) {
-  const filePath = path.join(__dirname, "helm/values.yaml")
-  const valuesYaml = await fsPromises.readFile(filePath, 'utf8');
-  const values = yaml.load(valuesYaml);
-
-
-  values.postgresql.postgresqlMigration.version = version
-  values.postgresql.image.tag = version
-  values.keycloak.image.tag = version
-
-
-  const newValues = yaml.dump(values)
-  await fsPromises.writeFile(filePath, newValues)
-
-  const {stdout, stderr} = await exec(
-    `git add helm/values.yaml && git commit -m "chore(): bump images version to ${version}" && git push origin master`
-  );
-  console.log(stdout);
-  console.log(stderr);
 }
 
 async function helm(version) {
@@ -229,8 +223,11 @@ async function pipeline() {
 
   for (const workloadsKey in workloads) {
     const workload = workloads[workloadsKey]
-    await build(version, workload)
-    await pushImages(version, workload, auth)
+    const imageFullName = await build(version, workload);
+    const image = await tagImage(imageFullName, version);
+    const imageLatest = await tagImage(imageFullName, "latest");
+    await pushImage(image.taggedImageObj, image.taggedImage, auth)
+    await pushImage(imageLatest.taggedImageObj, imageLatest.taggedImage, auth)
   }
 
   await helm(version)

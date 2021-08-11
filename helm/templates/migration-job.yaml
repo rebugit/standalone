@@ -14,8 +14,8 @@ spec:
               value: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
       containers:
         - name: database-migration-job
-          image: "{{.Values.rebugit.registry}}/{{.Values.rebugit.repository}}/migrator:{{.Values.postgresql.postgresqlMigration.version}}"
-          imagePullPolicy: Always
+          image: "{{.Values.postgresql.postgresqlMigration.registry}}/{{.Values.postgresql.postgresqlMigration.repository}}:{{.Values.postgresql.postgresqlMigration.version}}"
+          imagePullPolicy: {{.Values.postgresql.postgresqlMigration.pullPolicy}}
           env:
             - name: POSTGRES_ADMIN
               valueFrom:
@@ -66,5 +66,5 @@ spec:
             - name: REBUGIT_HOST
               value: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}"
       restartPolicy: Never
-  {{/*      ttlSecondsAfterFinished: 100*/}}
+{{/*      ttlSecondsAfterFinished: 100*/}}
   backoffLimit: 3
