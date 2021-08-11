@@ -8,7 +8,7 @@ postgresql:
   postgresqlMigration:
     registry: public.ecr.aws
     repository: rebugit/migrator
-    version: "1.0.4"
+    version: latest
     pullPolicy: Always
   extraEnv:
     - name: POSTGRES_DATABASE
@@ -16,7 +16,7 @@ postgresql:
   image:
     registry: public.ecr.aws
     repository: rebugit/postgres
-    tag: "1.0.4"
+    tag: latest
     pullPolicy: Always
 
 dashboard:
@@ -26,7 +26,7 @@ dashboard:
   image:
     registry: public.ecr.aws
     repository: rebugit/dashboard
-    version: "1.0.6"
+    version: latest
     pullPolicy: Always
   resources:
     requests: { }
@@ -40,7 +40,7 @@ tracer:
   image:
     registry: public.ecr.aws
     repository: rebugit/tracer
-    version: "0.1.0"
+    version: latest
     pullPolicy: Always
   resources:
     requests: { }
@@ -50,7 +50,7 @@ keycloak:
   image:
     registry: public.ecr.aws
     repository: rebugit/keycloak
-    tag: "1.0.4"
+    tag: latest
     pullPolicy: Always
   auth:
     adminPassword: admin
