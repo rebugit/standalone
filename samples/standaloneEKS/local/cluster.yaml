@@ -8,6 +8,11 @@ nodes:
     kubeadmConfigPatches:
       - |
         kind: InitConfiguration
+        imageGCHighThresholdPercent: 70
+        evictionHard:
+          nodefs.available: "0%"
+          nodefs.inodesFree: "0%"
+          imagefs.available: "70%"
         nodeRegistration:
           kubeletExtraArgs:
             node-labels: "ingress-ready=true"
