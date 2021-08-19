@@ -3,7 +3,7 @@ entries:
   rebugit:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-08-11T00:45:16.558831717Z"
+    created: "2021-08-19T01:40:27.151416207Z"
     dependencies:
     - name: keycloak
       repository: file://../authentication/keycloak/helm/keycloak
@@ -12,7 +12,7 @@ entries:
       repository: https://charts.bitnami.com/bitnami
       version: 10.5.1
     description: A Helm chart for Rebugit standalone service
-    digest: 915020867a57da3a729054329c05807c76527985f5650635ca48217f42e2feab
+    digest: 234a7c5ab7b57875782490b7895f9332a0ad0e631b1f4234021074de615a2733
     maintainers:
     - email: gioioso.matteo@gmail.com
       name: matteogioioso
@@ -21,6 +21,6 @@ entries:
     - https://github.com/rebugit/rbi-standalone/tree/master/helm
     type: application
     urls:
-    - https://rebugit.github.io/standalone/rebugit-1.0.5.tgz
-    version: 1.0.5
-generated: "2021-08-11T00:45:16.550760604Z"
+    - https://rebugit.github.io/standalone/rebugit-1.0.6.tgz
+    version: 1.0.6
+generated: "2021-08-19T01:40:27.145008859Z"
