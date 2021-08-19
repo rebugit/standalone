@@ -7,9 +7,6 @@ dashboard:
   podCommonAnnotations:
     linkerd.io/inject: enabled
 postgresql:
-  image:
-    repository: g0o0x0q6/postgres
-    tag: "1628318558"
   primary:
     podAnnotations:
       linkerd.io/inject: enabled
