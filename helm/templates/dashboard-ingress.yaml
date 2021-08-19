@@ -1,10 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: rebugit-web-ingress
+  name: rebugit-dashboard-ingress
   namespace: {{.Release.Namespace}}
   annotations:
-    kubernetes.io/ingress.class: "nginx"
+    {{- range $k, $v := .Values.dashboard.ingressAnnotations }}
+    {{ $k }}: {{ $v -}}
+    {{ end }}
 spec:
   rules:
     - http:

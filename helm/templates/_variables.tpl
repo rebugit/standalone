@@ -1,20 +1,20 @@
 {{/* List of internal values */}}
 
 {{- define "dashboard.deployment.name" -}}
-{{- print "rebugit-dashboard" -}}
+{{- print "rebugit-dashboard-deployment" -}}
 {{- end -}}
 {{- define "dashboard.service.name" -}}
-{{- print "rebugit-dashboard" -}}
+{{- print "rebugit-dashboard-service" -}}
 {{- end -}}
 {{- define "dashboard.container.port" -}}
 {{- print 8080 -}}
 {{- end -}}
 
 {{- define "tracer.deployment.name" -}}
-{{- print "rebugit-tracer" -}}
+{{- print "rebugit-tracer-deployment" -}}
 {{- end -}}
 {{- define "tracer.service.name" -}}
-{{- print "rebugit-tracer" -}}
+{{- print "rebugit-tracer-service" -}}
 {{- end -}}
 {{- define "tracer.container.port" -}}
 {{- print 8080 -}}
