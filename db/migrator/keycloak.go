@@ -111,6 +111,7 @@ func (k keycloak) CreateRealm() error {
 		Realm:                 gocloak.StringP(k.realmName),
 		LoginWithEmailAllowed: gocloak.BoolP(true),
 		BruteForceProtected:   gocloak.BoolP(true),
+		AccessTokenLifespan:   gocloak.IntP(15),
 		Clients: &[]gocloak.Client{
 			{
 				ClientID:    gocloak.StringP(k.clientName),
