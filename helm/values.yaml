@@ -22,8 +22,9 @@ postgresql:
 dashboard:
   authenticationMode: keycloak
   podCommonAnnotations: { }
-  ingressAnnotations:
-    kubernetes.io/ingress.class: "nginx"
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
   port: 3000
   image:
     registry: public.ecr.aws
@@ -39,9 +40,10 @@ tracer:
 
   # They will be injected in the deployment pod spec
   podCommonAnnotations: { }
-  ingressAnnotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
   image:
     registry: public.ecr.aws
     repository: rebugit/tracer

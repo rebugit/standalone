@@ -4,7 +4,7 @@ metadata:
   name: rebugit-dashboard-ingress
   namespace: {{.Release.Namespace}}
   annotations:
-    {{- range $k, $v := .Values.dashboard.ingressAnnotations }}
+    {{- range $k, $v := .Values.dashboard.ingress.annotations }}
     {{ $k }}: {{ $v -}}
     {{ end }}
 spec:
