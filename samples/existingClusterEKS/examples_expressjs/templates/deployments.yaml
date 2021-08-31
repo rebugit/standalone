@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.todoApi.deployment.name}}
+  namespace: {{.Release.Namespace}}
+  labels:
+    app: {{.Values.todoApi.deployment.name}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{.Values.todoApi.deployment.name}}
+  template:
+    metadata:
+      namespace: {{.Release.Namespace}}
+      labels:
+        app: {{.Values.todoApi.deployment.name}}
+    spec:
+      containers:
+        - name: {{.Values.todoApi.deployment.name}}
+          image: public.ecr.aws/rebugit/examples/expressjs:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{.Values.todoApi.port}}
+          env:
+            # Rebugit
+            - name: REBUGIT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: rebugit_api_key
+                  name: expressjs-todo-secrets
+            - name: REBUGIT_API_ENDPOINT
+              value: {{.Values.rebugit.endpoint}}
+            - name: REBUGIT_LOG
+              value: ALL
+
+            # Postgres
+            - name: DB_HOST
+              value: {{.Values.postgresql.serviceName}}
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgres_password
+                  name: expressjs-todo-secrets
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgres_user
+                  name: expressjs-todo-secrets
+            - name: DB_NAME
+              value: {{.Values.postgresql.dbName}}
+
+            # Mysql
+            - name: MYSQL_DB_HOST
+              value: {{.Values.mysql.serviceName}}
+            - name: MYSQL_DB_PORT
+              value: "3306"
+            - name: MYSQL_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql_password
+                  name: expressjs-todo-secrets
+            - name: MYSQL_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: mysql_user
+                  name: expressjs-todo-secrets
+            - name: MYSQL_DB_NAME
+              value: {{.Values.mysql.auth.database}}
+
+            # Application specific env
+            - name: PORT
+              value: {{.Values.todoApi.port}}
+            - name: AWS_REGION
+              value: {{.Values.todoApi.aws.region}}
+            - name: SECRET_NAME
+              value: {{.Values.todoApi.aws.secrets.mapQuestName}}
