@@ -16,6 +16,7 @@ spec:
       labels:
         app: {{.Values.todoApi.deployment.name}}
     spec:
+      serviceAccountName: todo-api-sa
       containers:
         - name: {{.Values.todoApi.deployment.name}}
           image: public.ecr.aws/rebugit/examples/expressjs:latest
