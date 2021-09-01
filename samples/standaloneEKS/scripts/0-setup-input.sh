@@ -48,3 +48,4 @@ export AWS_PROFILE=$AWS_PROFILE
 export AWS_SECRET_MANAGER_NAME=rebugit/secrets
 
 export KUBECONFIG=$HOME/.kube/rebugit-eks
+export CLUSTER_NAME=rebugit-standalone

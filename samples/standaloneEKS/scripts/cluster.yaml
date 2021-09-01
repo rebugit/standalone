@@ -2,9 +2,18 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
+availabilityZones:
+  - us-east-1a
+  - us-east-1d
+  - us-east-1c
+
 metadata:
   name: rebugit-standalone
   version: "1.20"
+  region: us-east-1
+  tags:
+    app: "rebugit"
+    type: "eks-cluster"
 
 managedNodeGroups:
   - name: nodegroup
