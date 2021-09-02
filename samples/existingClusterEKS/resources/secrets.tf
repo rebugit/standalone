@@ -1,3 +1,4 @@
+# Insert a secret: { "apiKey": "9dhf..."}
 resource "aws_secretsmanager_secret" "mapquest_api_key" {
   name = "example/mapQuestApikey"
   tags = {

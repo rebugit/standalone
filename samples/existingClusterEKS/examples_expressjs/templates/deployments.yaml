@@ -13,6 +13,8 @@ spec:
   template:
     metadata:
       namespace: {{.Release.Namespace}}
+      annotations:
+        checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
       labels:
         app: {{.Values.todoApi.deployment.name}}
     spec:
@@ -31,13 +33,13 @@ spec:
                   key: rebugit_api_key
                   name: expressjs-todo-secrets
             - name: REBUGIT_API_ENDPOINT
-              value: {{.Values.rebugit.endpoint}}
+              value: {{.Values.rebugit.endpoint | quote}}
             - name: REBUGIT_LOG
-              value: ALL
+              value: "ALL"
 
             # Postgres
             - name: DB_HOST
-              value: {{.Values.postgresql.serviceName}}
+              value: {{.Values.postgresql.serviceName | quote}}
             - name: DB_PORT
               value: "5432"
             - name: DB_PASSWORD
@@ -51,11 +53,11 @@ spec:
                   key: postgres_user
                   name: expressjs-todo-secrets
             - name: DB_NAME
-              value: {{.Values.postgresql.dbName}}
+              value: {{.Values.postgresql.dbName | quote}}
 
             # Mysql
             - name: MYSQL_DB_HOST
-              value: {{.Values.mysql.serviceName}}
+              value: {{.Values.mysql.serviceName | quote}}
             - name: MYSQL_DB_PORT
               value: "3306"
             - name: MYSQL_DB_PASSWORD
@@ -69,12 +71,12 @@ spec:
                   key: mysql_user
                   name: expressjs-todo-secrets
             - name: MYSQL_DB_NAME
-              value: {{.Values.mysql.auth.database}}
+              value: {{.Values.mysql.auth.database | quote}}
 
             # Application specific env
             - name: PORT
-              value: {{.Values.todoApi.port}}
+              value: {{.Values.todoApi.port | quote}}
             - name: AWS_REGION
-              value: {{.Values.todoApi.aws.region}}
+              value: {{.Values.todoApi.aws.region | quote}}
             - name: SECRET_NAME
-              value: {{.Values.todoApi.aws.secrets.mapQuestName}}
+              value: {{.Values.todoApi.aws.secrets.mapQuestName | quote}}

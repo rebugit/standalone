@@ -1,0 +1,7 @@
+rebugit:
+  host: https://standalone.sample.rebugit.com
+
+keycloak:
+  extraEnvVars:
+    - name: KEYCLOAK_EXTRA_ARGS
+      value: "-Dkeycloak.frontendUrl=https://standalone.sample.rebugit.com/rebugit/keycloak/auth"

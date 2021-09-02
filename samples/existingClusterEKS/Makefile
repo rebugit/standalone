@@ -15,5 +15,17 @@ eks-create-sa: terraform-apply
 		  --approve \
 		  --override-existing-serviceaccounts
 
-deploy: eks-create-sa
+deploy-expressjs: eks-create-sa
 	. ./env.sh && helm upgrade -i todo-api -n $${NAMESPACE} examples_expressjs/ -f examples_expressjs/values.yaml --create-namespace
+
+update-expressjs:
+	. ./env.sh && helm upgrade todo-api -n $${NAMESPACE} examples_expressjs/ -f examples_expressjs/values.yaml \
+					--set rebugit.apiKey=$${REBUGIT_API_KEY}
+
+deploy-rebugit:
+	. ./env.sh && helm upgrade -i rebugit -n rebugit ../../helm/ -f rebugit-values.yaml --create-namespace \
+				  --set postgresql.postgresqlPassword=$${POSTGRES_PASSWORD} \
+				  --set postgresql.postgresqlUserPassword=$${POSTGRES_USER_PASSWORD} \
+				  --set keycloak.auth.adminPassword=$${KEYCLOAK_ADMIN_PASSWORD} \
+				  --set keycloak.auth.userName=$${KEYCLOAK_USER_NAME} \
+				  --set keycloak.auth.userPassword=$${KEYCLOAK_USER_PASSWORD}

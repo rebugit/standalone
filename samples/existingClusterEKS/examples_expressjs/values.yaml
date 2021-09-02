@@ -1,6 +1,5 @@
 rebugit:
-  apiKey: ""
-  endpoint: ""
+  endpoint: standalone.sample.rebugit.com
 
 todoApi:
   deployment:
@@ -15,7 +14,7 @@ postgresql:
   postgresqlPassword: postgres
   postgresqlUsername: postgres
   dbName: postgres
-  serviceName: postgres-todo-db
+  serviceName: todo-api-postgresql
 
 mysql:
   auth:
@@ -23,4 +22,4 @@ mysql:
     database: mysql
     username: mysql
     password: mysql
-  serviceName: mysql-user-db
+  serviceName: todo-api-mysql
