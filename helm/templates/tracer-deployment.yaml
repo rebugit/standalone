@@ -26,7 +26,7 @@ spec:
           image: stefanevinance/wait-for-200
           env:
             - name: URL
-              value: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
+              value: "http://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
       containers:
         - name: tracer
           image: "{{.Values.tracer.image.registry}}/{{.Values.tracer.image.repository}}:{{ .Values.tracer.image.version }}"

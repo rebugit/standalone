@@ -12,12 +12,12 @@ data:
   database_user_name: "app"
   database_admin_name: "postgres"
 
-  authentication_internal_url: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak"
-  authentication_url: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}/rebugit/keycloak"
+  authentication_internal_url: "http://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak"
+  authentication_url: "{{.Values.rebugit.host}}/rebugit/keycloak"
 
   dasboard_container_port: "8080"
 
   authentication_mode: "keycloak"
 
-  tracer_api_url: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}/rebugit/api"
+  tracer_api_url: "{{.Values.rebugit.host}}/rebugit/api"
 

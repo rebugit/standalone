@@ -11,7 +11,7 @@ spec:
           image: stefanevinance/wait-for-200
           env:
             - name: URL
-              value: "{{ include "isTLSEnabled" .}}://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
+              value: "http://{{ include "authentication.service.name" .}}:8080/rebugit/keycloak/auth/"
       containers:
         - name: database-migration-job
           image: "{{.Values.postgresql.postgresqlMigration.registry}}/{{.Values.postgresql.postgresqlMigration.repository}}:{{.Values.postgresql.postgresqlMigration.version}}"
@@ -64,7 +64,7 @@ spec:
                   key: keycloak_user_password
                   name: rebugit-global-secrets
             - name: REBUGIT_HOST
-              value: "{{ include "isTLSEnabled" .}}://{{.Values.rebugit.host}}"
+              value: {{.Values.rebugit.host | quote}}
       restartPolicy: Never
 {{/*      ttlSecondsAfterFinished: 100*/}}
   backoffLimit: 3
