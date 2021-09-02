@@ -9,6 +9,8 @@ const ghpages = require('gh-pages');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const yaml = require('js-yaml');
+const https = require('https');
+const fs = require("fs");
 const fsPromises = require('fs').promises;
 
 const docker = new Docker({socketPath: '/var/run/docker.sock'});
@@ -162,6 +164,39 @@ async function attachSTOUTtoStream(stream) {
   })
 }
 
+/**
+ * Pushing the new version of the chart will delete the old version,
+ * therefore we need to download all the previous charts.
+ */
+async function downloadPreviousHelmReleases() {
+  // List all the files that are on the gh-pages branch
+  const {stdout, stderr} = await exec(
+    "git ls-tree origin/gh-pages -r --name-only"
+  );
+  console.log(stdout);
+  console.log(stderr);
+  // Files list is separated by a new line
+  const files = [...stdout.split("\n")];
+  console.log(files)
+
+  const createDownload = async (fileName) => new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(`docs/${fileName}`);
+    https.get(`https://raw.githubusercontent.com/rebugit/standalone/gh-pages/${fileName}`, function(response) {
+      response.pipe(file);
+      file.on("finish", () => {
+        file.close()
+        resolve();
+      });
+      file.on("error", reject);
+    });
+  });
+
+  for (const file of files) {
+    if (!file || file === '') continue
+    await createDownload(file.trim())
+  }
+}
+
 async function helm(version) {
   const chartDomain = "https://rebugit.github.io/standalone"
   // version chart
@@ -180,38 +215,30 @@ async function helm(version) {
   );
   console.log(stdout);
   console.log(stderr);
+}
 
-  // Copy the CNAME
-  console.log("Copying assets to docs folder")
-  await exec(
-    `cp ops/CNAME docs/ && cp ops/index.html docs/`
-  );
-
+const publishing = () => new Promise((resolve, reject) => {
   // Push everything with ghpages
   console.log("Deploying to github")
-  const publishing = () => new Promise((resolve, reject) => {
-    ghpages.publish(
-      'docs',
-      {
-        repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL.replace("https://github.com/", "")}`,
-        user: {
-          name: process.env.GITHUB_USERNAME,
-          email: process.env.GITHUB_EMAIL
-        }
-      },
-      function (err) {
-        if (err) {
-          return reject(err)
-        }
-
-        console.log("Chart has been published")
-        return resolve()
+  ghpages.publish(
+    'docs',
+    {
+      repo: `https://git:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY_URL.replace("https://github.com/", "")}`,
+      user: {
+        name: process.env.GITHUB_USERNAME,
+        email: process.env.GITHUB_EMAIL
       }
-    );
-  })
+    },
+    function (err) {
+      if (err) {
+        return reject(err)
+      }
 
-  await publishing()
-}
+      console.log("Chart has been published")
+      return resolve()
+    }
+  );
+})
 
 async function pipeline() {
   const version = await release();
@@ -230,7 +257,9 @@ async function pipeline() {
     await pushImage(imageLatest.taggedImageObj, imageLatest.taggedImage, auth)
   }
 
+  await downloadPreviousHelmReleases()
   await helm(version)
+  await publishing()
 }
 
 pipeline().then().catch(e => {
