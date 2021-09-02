@@ -23,7 +23,7 @@ update-expressjs:
 					--set rebugit.apiKey=$${REBUGIT_API_KEY}
 
 deploy-rebugit:
-	. ./env.sh && helm upgrade -i rebugit -n rebugit ../../helm/ -f rebugit-values.yaml --create-namespace \
+	. ./env.sh && helm upgrade -i rebugit -n rebugit rebugit/rebugit -f rebugit-values.yaml --create-namespace \
 				  --set postgresql.postgresqlPassword=$${POSTGRES_PASSWORD} \
 				  --set postgresql.postgresqlUserPassword=$${POSTGRES_USER_PASSWORD} \
 				  --set keycloak.auth.adminPassword=$${KEYCLOAK_ADMIN_PASSWORD} \
