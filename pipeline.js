@@ -179,6 +179,8 @@ async function downloadPreviousHelmReleases() {
   const files = [...stdout.split("\n")];
   console.log(files)
 
+  await fsPromises.mkdir('docs/', { recursive: true });
+
   const createDownload = async (fileName) => new Promise((resolve, reject) => {
     const file = fs.createWriteStream(`docs/${fileName}`);
     https.get(`https://raw.githubusercontent.com/rebugit/standalone/gh-pages/${fileName}`, function(response) {
