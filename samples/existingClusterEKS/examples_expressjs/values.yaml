@@ -1,0 +1,25 @@
+rebugit:
+  endpoint: standalone.sample.rebugit.com
+
+todoApi:
+  deployment:
+    name: expressjs-todo-api
+  port: 8080
+  aws:
+    region: us-east-1
+    secrets:
+      mapQuestName: example/mapQuestApikey
+
+postgresql:
+  postgresqlPassword: postgres
+  postgresqlUsername: postgres
+  dbName: postgres
+  serviceName: todo-api-postgresql
+
+mysql:
+  auth:
+    rootPassword: mysql
+    database: mysql
+    username: mysql
+    password: mysql
+  serviceName: todo-api-mysql
